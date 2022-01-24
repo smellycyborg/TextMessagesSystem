@@ -12,26 +12,13 @@ local PlayerFrame = ReplicatedStorage:WaitForChild('Gui'):FindFirstChild('Player
 
 local AddPlayerFrameEvent = ReplicatedStorage:WaitForChild('RemoteEvents'):FindFirstChild('AddPlayerFrameEvent')
 
-function AddPlayerFrames(frame, parent)
+function AddPlayerFrames()
 	local CurrentPlayers = Players:GetChildren()
 	
-	for _, child in pairs(CurrentPlayers) do
-		
-		local SearchedPlayer = TextMessages.SearchPlayerFramesTable(child)
-		if SearchedPlayer then continue end
-		
-		TextMessages.AddToPlayerFrames(child)
-		
-		local Frame = frame:Clone()
-		Frame.Name = child.Name
-		Frame.Parent = parent
-
-		local Label = Frame['PlayerLabel']
-		Label.Text = child.Name
-	end
+	TextMessages.AddPlayerFrameToScrollingFrame(Player, CurrentPlayers, PlayerFrame, ScrollingFrame)
 end
 
 while true do
-	AddPlayerFrames(PlayerFrame, ScrollingFrame) 
+	AddPlayerFrames() 
 	wait(6)
 end

@@ -7,9 +7,15 @@ local TextMessagesEvent = ReplicatedStorage:WaitForChild('RemoteEvents'):FindFir
 
 local TextMessages = {}
 
+--// Server Table
+
 TextMessages.PlayersTable = {}
 
+--// Local Table
+
 TextMessages.PlayerFramesTable = {}
+
+--// Server Functions
 
 function TextMessages.AddPlayer(player)
 	if not player then return end
@@ -56,6 +62,8 @@ function TextMessages.GetAllPlayersFromPlayersTable()
 	return funcTable
 end
 
+--// Local Functions
+
 TextMessages.AddToPlayerFrames = function(player)
 	if not player then return end
 	
@@ -65,6 +73,25 @@ TextMessages.AddToPlayerFrames = function(player)
 	table.insert(TextMessages.PlayerFramesTable, player)
 	
 	print(TextMessages.PlayerFramesTable)
+end
+
+TextMessages.AddPlayerFrameToScrollingFrame = function(player, players, frame, parent)
+	for _, child in pairs(players) do
+		local ChildIsEqualToPlayer = child == player
+		if ChildIsEqualToPlayer then continue end
+
+		local SearchedPlayer = TextMessages.SearchPlayerFramesTable(child)
+		if SearchedPlayer then continue end
+
+		TextMessages.AddToPlayerFrames(child)
+
+		local Frame = frame:Clone()
+		Frame.Name = child.Name
+		Frame.Parent = parent
+
+		local Label = Frame['PlayerLabel']
+		Label.Text = child.Name
+	end
 end
 
 TextMessages.SearchPlayerFramesTable = function(player)

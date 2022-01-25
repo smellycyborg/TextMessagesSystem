@@ -47,12 +47,6 @@ function TextMessages.RemovePlayer(player)
 	print(TextMessages.PlayersTable)
 end
 
-function TextMessages.SendTextMessage(player, message)
-	if not player or message then return end
-	
-	TextMessagesEvent:FireClient(player, message)
-end
-
 function TextMessages.GetAllPlayersFromPlayersTable()
 	local funcTable = {}
 	for index, child in pairs(TextMessages.PlayersTable) do
@@ -88,6 +82,9 @@ TextMessages.AddPlayerFrameToScrollingFrame = function(player, players, frame, p
 		local Frame = frame:Clone()
 		Frame.Name = child.Name
 		Frame.Parent = parent
+		
+		local MessageButton = Frame['MessageButton']
+		MessageButton:SetAttribute('Player', child)
 
 		local Label = Frame['PlayerLabel']
 		Label.Text = child.Name
@@ -99,12 +96,27 @@ TextMessages.SearchPlayerFramesTable = function(player)
 	
 	for _, child in pairs(TextMessages.PlayerFramesTable) do
 		if child == player then 
-			print('found player in frames table')
 			return true
 		else
 			return false
 		end
 	end
+end
+
+-- TODO need to set up this script right quick
+TextMessages.MessageContact = function(ContactsFrame, frame)
+	
+end
+
+-- TODO: need to set up this script after ui
+TextMessages.SendTextMessage = function(player, message)
+	if not player or message then return end
+
+	TextMessagesEvent:FireClient(player, message)
+end
+
+TextMessages.ButtonsClicked = function(frame)
+	frame.Visible = not frame.Visible
 end
 
 return TextMessages

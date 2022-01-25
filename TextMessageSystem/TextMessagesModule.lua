@@ -1,3 +1,5 @@
+-- TODO:  rewrite
+
 --// TextMessages Remotes, ReplicatedStorages
 
 local ReplicatedStorage = game:GetService('ReplicatedStorage')
@@ -71,23 +73,25 @@ end
 
 TextMessages.AddPlayerFrameToScrollingFrame = function(player, players, frame, parent)
 	for _, child in pairs(players) do
-		local ChildIsEqualToPlayer = child == player
-		if ChildIsEqualToPlayer then continue end
+		--local ChildIsEqualToPlayer = child == player
+		--if ChildIsEqualToPlayer then continue end
 
-		local SearchedPlayer = TextMessages.SearchPlayerFramesTable(child)
-		if SearchedPlayer then continue end
+		--local SearchedPlayer = TextMessages.SearchPlayerFramesTable(child)
+		--if SearchedPlayer then continue end
 
 		TextMessages.AddToPlayerFrames(child)
 
 		local Frame = frame:Clone()
 		Frame.Name = child.Name
 		Frame.Parent = parent
-		
-		local MessageButton = Frame['MessageButton']
-		MessageButton:SetAttribute('Player', child)
 
 		local Label = Frame['PlayerLabel']
 		Label.Text = child.Name
+		
+		local MessageButton = Frame['MessageButton']
+		MessageButton:SetAttribute('Player', child.Name)
+		
+		
 	end
 end
 
@@ -103,9 +107,21 @@ TextMessages.SearchPlayerFramesTable = function(player)
 	end
 end
 
+TextMessages.GetPlayer = function(PlayerName, players)
+	for _, child in pairs(players) do
+		local PlayerNameIsEqualToPlayer = PlayerName == child.Name
+		if PlayerNameIsEqualToPlayer then
+			return child
+		end
+	end
+end
+
 -- TODO need to set up this script right quick
-TextMessages.MessageContact = function(ContactsFrame, frame)
-	
+TextMessages.MessageContact = function(ContactsFrame, MessageFrame, ContactLabel, Button)
+	local PlayerName = Button:GetAttribute('Player')
+	ContactsFrame.Visible = false
+	MessageFrame.Visible = true
+	ContactLabel.Text = PlayerName
 end
 
 -- TODO: need to set up this script after ui
@@ -118,5 +134,19 @@ end
 TextMessages.ButtonsClicked = function(frame)
 	frame.Visible = not frame.Visible
 end
+
+--TextMessages.MessageContactButtonsHandler = function(ContactsFrame, MessageFrame, ContactLabel)
+--	local DescendantsOfContactsFrame = ContactsFrame:GetDescendants()
+	
+--	for _, child in pairs(DescendantsOfContactsFrame) do
+--		local ChildIsATextButton = child:IsA('TextButton')
+		
+--		if ChildIsATextButton then
+--			child.MouseButton1Down:Connect(function()
+--				TextMessages.MessageContact(ContactsFrame, MessageFrame, ContactLabel, child)
+--			end)
+--		end
+--	end	
+--end
 
 return TextMessages
